@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html>
+  <head>
+   <title>My App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <link rel="stylesheet" href="app.min.css">
+    <link type="text/css" rel="stylesheet" href="jQuery.mmenu-master/src/css/jquery.mmenu.all.css" />
+    <script type="text/javascript" src="jQuery.mmenu-master/src/js/jquery.mmenu.min.all.js"></script>
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script> 
+    <script type="text/javascript">
+          document.addEventListener("deviceready", onDeviceReady, false);
+             // PhoneGap is ready
+          function onDeviceReady() {
+             // Do cool things here...
+
+             }
+
+    </script>
+
+    <style>
+      /* put your styles here */
+      .panel-toggle{
+      {
+ 
+  background: center center no-repeat transparent ;
+  background-image: url( data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAAZCAYAAADE6YVjAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAADhJREFUeNpi/P//PwOtARMDHQBdLGFBYtMq3BiHT3DRPU4YR4NrNAmPJuHRJDyahEeT8Ii3BCDAAF0WBj5Er5idAAAAAElFTkSuQmCC ) ;
+
+  display: block ;
+  width: 40px ;
+  height: 40px ;
+  left: -10px;
+
+
+}
+      }
+    </style>
+  </head>
+  <body>
+    <!-- put your pages here -->
+    <div data-page="home" class="app-page">
+      <div class="app-topbar blue">
+        <div class="app-button panel-toggle" style=" background: center center no-repeat transparent ;
+  background-image: url( data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAAZCAYAAADE6YVjAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAADhJREFUeNpi/P//PwOtARMDHQBdLGFBYtMq3BiHT3DRPU4YR4NrNAmPJuHRJDyahEeT8Ii3BCDAAF0WBj5Er5idAAAAAElFTkSuQmCC ) ;
+
+  display: block ;
+  width: 40px ;
+  height: 40px ;
+  left: -10px;" id="panel-toggle"></div>
+        <div class="app-title ">Home</div>
+
+
+      </div>
+
+
+      <div class="app-content" id="body" style="text-align:center;">
+        <nav id="menu">
+        <ul>
+          <li><a href="#" class="app-button" data-target="new-book">Home</a></li>
+          <li><a href="#about">TEST</a></li>
+          <li><a href="#" class="app-button" data-target="viewer" data-target-args="{'name':'3amer'}">viewer TEST</a></li>
+          <li><a href="#" class="app-button" data-target="new-book" data-target-args='{"name":"3amer"}'>New Book</a></li>
+        </ul>
+      </nav>
+
+        <h3>Hello, World</h3>
+        <img src="image.gif" id="gh">
+      </div>
+
+    </div>
+
+    <div class="app-page dark-page" data-page="viewer">
+  <div class="app-topbar">
+    <div class="left app-button" data-back data-autotitle></div>
+    <div class="app-title">Viewer</div>
+
+  </div>
+  <div class="app-content"></div>
+</div>
+
+<div class="app-page" data-page="new-book">
+  <div class="app-topbar blue">
+    <div class="left app-button" data-back data-autotitle></div>
+    <div class="app-title">New Book</div>
+
+  </div>
+
+  <div class="app-content">
+    <div class="app-section" id="qr-section">
+      <form id="book_info" style="display:none;">
+        <input id="new_book_isbn" class="app-input" placeholder="ISBN">
+        <input id="new_book_title" class="app-input" placeholder="title">
+        <input id="new_book_author" class="app-input" placeholder="author">
+        <textarea id="new_book_desc" class="app-input" placeholder="about this book...."></textarea>
+        <div id="add_new_book_submit" class="app-button call-qr blue">ADD THIS BOOK</div>
+        
+
+      </form>
+        
+        <div id="get_isbn_qr" class="app-button call-qr blue">ADD WITH ISBN</div>
+
+    </div>
+
+    <div class="app-section result-area" style="display:none;">
+    </div>
+  </div>
+
+</div>
+
+
+
+
+    <script src="app.min.js"></script>
+    <script src="http://cdn.kik.com/photo-viewer/1/photo-viewer.js"></script>
+
+    <script>
+      /* put your javascript here */
+
+      
+
+      $(function() {
+        $('nav#menu').mmenu();
+      });
+
+     App.controller('home', function (page) {
+        // put stuff here
+              var ele = $(page).find(".panel-toggle");
+              ele.on('click',function(e){
+              $("#menu").trigger("open.mm");
+
+        });
+      });
+
+      App.controller('viewer', function (page) {
+        /////
+        var urls = [
+    'http://i.imgur.com/yDK68Ff.jpg',
+    'http://i.imgur.com/rKIESYd.jpg',
+    'http://i.imgur.com/OTaodxO.jpg'
+  ];
+         var photoViewer = new PhotoViewer(page,urls);
+        $("#menu").trigger("close.mm");
+      });
+
+      App.controller('new-book',function(page,data){
+        $("#menu").trigger("close.mm");
+        var call_qr = $(page).find(".call-qr");
+        var result_area = $(page).find(".result-area");
+        var myName = data.name;
+        
+        call_qr.on('click',function(e){
+          ///alert("i will open qr reader..."+myName);
+         //call_dialog("YES","do you want to know your name?","what's your name!",function(){
+            get_book_info(9781118285909,result_area);/// test only 
+
+            cordova.plugins.barcodeScanner.scan(
+      function (result) {
+          result_area.html(result);
+          get_book_info(result.text,result_area);
+
+      }, 
+      function (error) {
+          alert("Scanning failed: " + error);
+      }
+   );
+         // });
+
+        });
+      
+
+
+      });
+
+
+function call_dialog(OK_TEXT,MSG,TITLE,OK_FUNCTION){
+  App.dialog({
+              title:TITLE,
+              text:MSG,
+              okButton: OK_TEXT,
+              ccancelButton:'Cancel'
+            }, function (OK) {
+              if (OK) {
+                // try again
+               OK_FUNCTION();
+              }
+            });
+}
+
+//App.setDefaultTransition('fade'); // global
+
+// set per platform
+
+      try {
+        App.restore();
+      } catch (err) {
+        App.load('home');
+      }
+
+function get_book_info(ISBN,ELE){
+
+    //https://www.googleapis.com/books/v1/volumes?q=isbn:0771595158
+    ///alert(ISBN);
+    var  googleAPI = 'https://www.googleapis.com/books/v1/volumes?q='+ISBN;
+
+    var req_info = $.getJSON(googleAPI);
+    req_info.done(function(data){
+      
+      if(typeof data['items'] != 'undefined'  ){
+        var books_numbers = data['items'].length-1;
+        var title = data['items'][books_numbers]['volumeInfo']['title'];
+        var desc = data['items'][books_numbers]['volumeInfo']['description'];
+        if(typeof data['items'][books_numbers]['volumeInfo']['imageLinks'] != 'undefined'  ){
+        var cover = data['items'][books_numbers]['volumeInfo']['imageLinks']['thumbnail'];
+        }
+      }
+      else{
+        ELE.append("<p>No book found :( <br> you can add it your self :)</p>");
+        //show_add_new_book();
+        $('#book_info').css('display','block');
+        $('#get_isbn_qr').css('display','none');
+          return 0;
+
+      }
+
+      
+      
+
+      if(typeof cover != "undefined"){
+            elemnt_continer = $("<div />").attr({class:"app-section",style:"text-align:center;"});
+            element = $("<img />").attr({src:cover,style:""});
+            elemnt_continer.append(element);
+            ELE.append(elemnt_continer);
+            $(ELE).css('display','block');
+            //info['cover'] = cover;
+            
+           //$("#book-cover").attr('src',cover);
+      }
+
+      
+      //info['title'] = title;
+     // info['desc'] = desc;
+     // info['author'] = author;
+     // info['language'] = language;
+     // info['isbn'] = isbn;
+     // info['year'] = year;
+     // info['type'] = type;
+
+
+
+
+
+      ELE.append("<h3>"+title+"</h3>");
+      ELE.append("<p>"+desc+"</p>");
+      $(ELE).append("<div class='app-button blue' id='add-book-isbn'>SUBMIT WITH ISBN </div>");
+
+      $("#add-book-isbn").attr({'data-book-title':title,'data-book-cover':cover,style:'display:block'});
+      //$(submitButton).attr('data-clickable-class','active');
+      //submitButton.append("SUBMIT");
+      //ELE.append(submitButton);
+
+      $('#qr-section').css('display','none');
+
+
+
+      
+      });
+
+    req_info.fail(function(data){
+      alert("fail to send info "+data['items'][0]['volumeInfo']['title']);
+    });
+    req_info.error(function(error){
+      alert("error 12:"+error);
+    }) 
+
+  }
+
+$(document).on("click","#add-book-isbn",function(){
+          call_dialog("SUBMIT","make sure this is your book or you can add it manuly.","are you sure?",function(){
+            
+            alert($("#add-book-isbn").attr('data-book-title'));
+          });
+        })
+
+
+function add_new_book(ISBN,TITLE,DESC,AUTHOR,LANGUAGE,type,isForm){
+  ////////
+}
+
+
+    </script>
+  </body>
+</html>
